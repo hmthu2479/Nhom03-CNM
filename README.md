@@ -22,7 +22,7 @@ ng version
 ### 3. Install npm Dependencies
 Navigate to the project directory and install the necessary dependencies:
 ```sh
-cd your-angular-chat-app
+cd chat-app
 npm install
 ```
 
