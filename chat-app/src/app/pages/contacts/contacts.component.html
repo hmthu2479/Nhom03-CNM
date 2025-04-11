@@ -1,0 +1,33 @@
+<body>
+    <div class="row">
+        <div class="header">
+          <div class="search">
+              <div class="searchbar">
+                  <i class="fa fa-search" aria-hidden="true"></i>
+                  <input type="text" placeholder="Search..."/>
+                </div>
+              <button class="add-friend" (click)="toggleModal()">
+                <i class="fa-solid fa-user-plus create clickable"></i></button>
+              <app-modal [isOpen]="showModal" (closeModal)="toggleModal()" title="Add Friend"></app-modal>
+          </div>
+          <div class="header-chat">
+                <p></p>
+              <i class="icon clickable fa fa-ellipsis-h right" aria-hidden="true"></i>
+            </div>
+      </div>
+        <section class="Left-section">
+          <div class="left-section">
+            <p>Friends list</p>
+          </div>
+          <div class="left-section">
+            <p>Group list</p>
+          </div>
+          <div class="left-section">
+            <p>Requests</p>
+          </div>
+        </section>
+        <section class="Right-section">
+
+        </section>
+      </div>
+    </body>

@@ -24,6 +24,10 @@ Navigate to the project directory and install the necessary dependencies:
 ```sh
 cd your-angular-chat-app
 npm install
+npm i ngx-emoji
+npm i ngx-emoji-picker
+ng update @angular/core@15 @angular/cli@15
+
 ```
 
 ### 4. Run the App

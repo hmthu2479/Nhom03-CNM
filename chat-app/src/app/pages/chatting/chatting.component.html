@@ -1,0 +1,142 @@
+<body>
+  <div class="row">
+    <!-- HEADER -->
+    <div class="header">
+      <div class="search">
+        <div class="searchbar">
+          <i class="fa fa-search" aria-hidden="true"></i>
+          <input type="text" placeholder="Search..." />
+        </div>
+        <button class="add-friend" (click)="toggleModal()">
+          <i class="fa-solid fa-user-plus create clickable"></i>
+        </button>
+        <app-modal [isOpen]="showModal" (closeModal)="toggleModal()" title="Add Friend"></app-modal>
+      </div>
+
+      <!-- RIGHT HEADER CHAT INFO -->
+      <div class="header-chat" [ngClass]="{ 'hide-left': !selectedConversationId }">
+        <ng-container *ngIf="activeConversation">
+          <div class="photo" [style.backgroundImage]="'url(' + activeConversation.avatar + ')'">
+            <div class="online" *ngIf="activeConversation.lastActive === 'Just now'"></div>
+          </div>
+          <div class="username">
+            <p class="name">{{ activeConversation.name }}</p>
+            <p class="last-seen">{{ activeConversation.lastActive }}</p>
+          </div>
+          <i class="icon clickable fa fa-ellipsis-h right" aria-hidden="true"></i>
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- LEFT CONVERSATION LIST -->
+    <section class="Left-section">
+      <div 
+        *ngFor="let convo of conversations"
+        class="left-section message"
+        [class.message-active]="convo.id === selectedConversationId"
+        (click)="selectConversation(convo.id)"
+      >
+        <div class="photo" [style.backgroundImage]="'url(' + convo.avatar + ')'">
+          <div class="online" *ngIf="convo.lastActive === 'Just now'"></div>
+        </div>
+        <div class="desc-contact">
+          <div class="username">
+            <p class="name" [class.unread]="convo.unreadCount > 0">{{ convo.name }}</p>
+            <p *ngIf="convo.unreadCount > 0" class="msg-notification-nb">{{ convo.unreadCount }}</p>
+          </div>
+          <p class="message" [class.unread]="convo.unread">
+            {{ getLastMessage(convo) }}
+          </p>          
+        </div>
+        <div class="timer">{{ convo.timeAgo }}</div>
+
+      </div>
+
+      <div *ngIf="conversations.length === 0" class="no-conversations">
+        No conversations yet. Start chatting!
+      </div>
+    </section>
+
+    <!-- RIGHT CHAT PANEL -->
+    <section class="Right-section">
+      <div *ngIf="selectedConversationId as id">
+        <div class="messages-chat">
+          
+          <!-- Date separator -->
+          <div class="date">
+            <p class="date-text">{{ activeConversation?.sendAtDate }}</p>
+          </div>
+    
+          <ng-container *ngFor="let msg of activeConversation?.messages; let i = index">
+            
+            <div 
+              class="message" 
+              *ngIf="msg.sender === 'them' && isLastOfSenderGroup(i)" >
+              <!-- Only show avatar at the end of 'them' message group -->
+              <div class="photo" 
+                   [style.background-image]="'url(' + activeConversation?.avatar + ')'">
+                <div class="online" *ngIf="activeConversation?.lastActive === 'Just now'"></div>
+              </div>
+              <div class="bubble-wrapper">
+                <div class="bubble">
+                  <p class="text">{{ msg.content }}</p>
+                </div>
+                <p class="time">{{ msg.timestamp }}</p>
+              </div>
+    
+            </div>
+          </ng-container>
+          <ng-container *ngFor="let msg of activeConversation?.messages; let i = index">
+            <div 
+              class="response" 
+              *ngIf="msg.sender === 'me' && isLastOfSenderGroup(i)" >
+              <p class="text">{{ msg.content }}</p>
+    
+              <!-- Show time at the end of a message group -->
+              <p class="response-time time" *ngIf="isLastOfSenderGroup(i)">
+                {{ msg.timestamp }}
+              </p>
+    
+            </div>
+          </ng-container>
+    
+          <!-- Footer Input Section -->
+          <div class="footer-chat">
+            <div class="sub-footer">
+              <div class="emoji-wrapper">
+                <div class="icon emoji clickable" (click)="toggleEmojiPicker()">😃</div>
+              
+                <emoji-mart
+                  *ngIf="showEmojiPicker"
+                  set="apple"
+                  title="Pick your emoji"
+                  (emojiSelect)="addEmoji($event)"
+                  class="custom-emoji-picker"
+                ></emoji-mart>
+              </div>
+              
+          
+              <!-- Input field -->
+              <input 
+                type="text" 
+                class="write-message" 
+                [(ngModel)]="messageText" 
+                placeholder="Type your message here" />
+          
+              <i class="icon attach fa-solid fa-paperclip clickable"></i>
+            </div>
+          
+            <i class="icon send fa-solid fa-paper-plane clickable"></i>
+          </div>
+          
+        </div>
+      </div>
+    
+      <!-- Placeholder when no conversation is selected -->
+      <div *ngIf="!selectedConversationId" class="no-chat-selected">
+        <img src="../../../assets/let's-chat.png" class="no-chat-img" />
+      </div>
+    </section>
+    
+  </div>
+</body>
